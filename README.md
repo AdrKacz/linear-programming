@@ -13,6 +13,15 @@ pip install -r requirements.txt
 
 # BIP
 
+### *Usine* and *Entrepot*
+
+Attribute | Benefits | Cost
+-- | -- | --
+*Usine Lyon* | 9 | 6
+*Usine Grenoble* | 5 | 3
+*Entrepot Lyon* | 6 | 5
+*Entrepot Grenoble* | 4 | 2
+
 ## Variables
 
 We define **4** variables in the set `{0, 1}`.
@@ -38,7 +47,7 @@ We define **4** variables in the set `{0, 1}`.
 
 ## Optimise
 
-You want to maximise the benefits, knowing the benefits of each construction : `Maximise usine_lyon * 9 + usine_grenoble * 5 + entrepot_lyon * 6 + entrepot_grenoble * 4`.
+You want to maximise the benefits, knowing the benefits of each construction: `Maximise usine_lyon * 9 + usine_grenoble * 5 + entrepot_lyon * 6 + entrepot_grenoble * 4`.
 
 ## Solution
 
@@ -57,8 +66,69 @@ Usine_Lyon -> 1.0
 
 # Gateaux
 
+*Global* is what we have, *Tarte Banane* and *Tarte Chocolat* are object we what to create with what we have. We what to optimise the total **price**.
+
+### Global
+
+Attribute | Value
+-- | --
+*Farine* | 4000
+*Banane* | 6
+*Cacao* | 500
+*Sucre* | 2000
+*Beurre* | 500
+
+### Tarte Banane
+
+Attribute | Value
+-- | --
+*Farine* | 250
+*Banane* | 2
+*Cacao* | 0
+*Sucre* | 75
+*Beurre* | 100
+**Price** | 4
+
+### Tarte Chocolat
+
+Attribute | Value
+-- | --
+*Farine* | 200
+*Banane* | 0
+*Cacao* | 75
+*Sucre* | 150
+*Beurre* | 150
+**Price** | 4
+
 ## Variables
 
-## Constraits
+We define **4** *integer* variables greater than **0**.
+
+- `banane`, the number of *tarte banane*.
+
+- `chocolat`, the number of *tarte chocolat*.
+
+## Constraints
+
+1. There is **4000**g of *farine*: `250 * banane + 200 * chocolat <= 4000`.
+
+2. There is **6** *banane*: `2 * banane  <= 6`.
+
+3. There is **500**g of *cacao*: `75 * chocolat <= 500`.
+
+4. There is **2000**g of *sucre*: `75 * banane + 150 * chocolat <= 2000`.
+
+5. There is **500**g of *beurre*: `100 * banane + 150 * chocolat <= 500`.
 
 ## Optimise
+
+You want to maximise the benefits (*price*): `Maximise 4 * banane + 4.5 * chocolat`.
+
+## Solution
+
+```
+Problem Status -> Optimal : Maximize
+OBJ -> 17.0
+Tarte_Banane -> 2.0
+Tarte_Chocolat -> 2.0
+```
