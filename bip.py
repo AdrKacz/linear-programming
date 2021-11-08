@@ -12,7 +12,7 @@ entrepot_grenoble = LpVariable('Entrepot_Grenoble', 0, 1, LpInteger)
 def maximise_benefits():
     problem = LpProblem('BIP_Problem', LpMaximize)
 
-    problem += entrepot_lyon + entrepot_grenoble <= 1
+    problem += entrepot_lyon + entrepot_grenoble == 1
 
     problem += entrepot_lyon <= usine_lyon
     problem += entrepot_grenoble <= usine_grenoble

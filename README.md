@@ -11,7 +11,7 @@ source bin/activate
 pip install -r requirements.txt
 ```
 
-# BIP `./bip.py`
+# BIP (1) `./bip.py`
 
 ### *Usine* and *Entrepot*
 
@@ -36,7 +36,7 @@ We define **4** variables in the set `{0, 1}`.
 
 ## Constraints
 
-1. There is at most **1** *entrepot*: `entrepot_lyon + entrepot_grenoble <= 1`.
+1. There is exactly **1** *entrepot*: `entrepot_lyon + entrepot_grenoble <= 1`.
 
 2. If there is *entrepot*, there must be *usine* in the same place:
  - For *Lyon*, `entrepot_lyon <= usine_lyon`,
@@ -53,18 +53,18 @@ You want to maximise the benefits, knowing the benefits of each construction: `M
 
 ```
 Problem Status -> Optimal : Maximize
-OBJ -> 14.0
-Entrepot_Grenoble -> 0.0
+OBJ -> 9.0
+Entrepot_Grenoble -> 1.0
 Entrepot_Lyon -> 0.0
 Usine_Grenoble -> 1.0
-Usine_Lyon -> 1.0
+Usine_Lyon -> 0.0
 ```
 
 ### Optimise ratio `gains / couts`
 
 *This operation in none linear, and thus cannot be solve with PuLP.*
 
-# Gateaux `./gateaux.py`
+# Gateaux (3) `./gateaux.py`
 
 *Global* is what we have, *Tarte Banane* and *Tarte Chocolat* are object we what to create with what we have. We what to optimise the total **price**.
 
@@ -132,3 +132,56 @@ OBJ -> 17.0
 Tarte_Banane -> 2.0
 Tarte_Chocolat -> 2.0
 ```
+
+# Voyage (2) `./voyage.py`
+
+## Variables
+
+We define binary variable for each travel we can perform. There is **4** cities, so **6** different travels.
+
+- `lyon_st_etienne`, **1** if you go from *Lyon* to *St-Etienne* (or the other way around), **0** otherwise
+
+- `lyon_valence`, **1** if you go from *Lyon* to *Valence* (or the other way around), **0** otherwise
+
+- `lyon_grenoble`, **1** if you go from *Lyon* to *Grenoble* (or the other way around), **0** otherwise
+
+- `st_etienne_valence`, **1** if you go from *St-Etienne* to *Valence* (or the other way around), **0** otherwise
+
+- `st_etienne_grenoble`, **1** if you go from *St-Etienne* to *Grenoble* (or the other way around), **0** otherwise
+
+- `grenoble_valence`, **1** if you go from *Grenoble* to *Valence* (or the other way around), **0** otherwise
+
+## Constraints
+
+You want to do a loop through all **4** cities. So each city must be linked to exactly **2** travels
+
+- For *Lyon*: `lyon_st_etienne + lyon_valence + lyon_grenoble == 2`.
+
+- For *St-Etienne*: `lyon_st_etienne + st_etienne_valence + st_etienne_grenoble == 2`.
+
+- For *Valence*: `lyon_valence + st_etienne_valence + grenoble_valence == 2`.
+
+- For *Grenoble*: `lyon_grenoble + st_etienne_grenoble + grenoble_valence == 2`.
+
+## Optimise
+
+You want to minimise the distance you travel: `26 * lyon_st_etienne + 34 * lyon_valence + 78 * lyon_grenoble + 18 * st_etienne_valence + 52 * st_etienne_grenoble  + 51 * grenoble_valence`
+
+*You cannot use less than 6 variables, indeed, the problem is defined by 6 values, each values is assigned to exactly one variable here.*
+
+## Solution
+
+```
+Problem Status -> Optimal : Minimize
+OBJ -> 163.0
+Grenoble_Valence -> 1.0
+Lyon_Grenoble -> 0.0
+Lyon_St_Etienne -> 1.0
+Lyon_Valence -> 1.0
+St_etienne_Grenoble -> 1.0
+St_etienne_Valence -> 0.0
+```
+
+The optimal way is ***Lyon* - *St-Etienne* - *Grenoble* - *Valence* - *Lyon***.
+
+# Jobshop (5) `./jobshop.py`
