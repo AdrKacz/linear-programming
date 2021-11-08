@@ -11,7 +11,7 @@ source bin/activate
 pip install -r requirements.txt
 ```
 
-# BIP
+# BIP `./bip.py`
 
 ### *Usine* and *Entrepot*
 
@@ -64,7 +64,7 @@ Usine_Lyon -> 1.0
 
 *This operation in none linear, and thus cannot be solve with PuLP.*
 
-# Gateaux
+# Gateaux `./gateaux.py`
 
 *Global* is what we have, *Tarte Banane* and *Tarte Chocolat* are object we what to create with what we have. We what to optimise the total **price**.
 
