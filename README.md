@@ -40,6 +40,25 @@ We define **4** variables in the set `{0, 1}`.
 
 You want to maximise the benefits, knowing the benefits of each construction : `Maximise usine_lyon * 9 + usine_grenoble * 5 + entrepot_lyon * 6 + entrepot_grenoble * 4`.
 
+## Solution
+
+```
+Problem Status -> Optimal : Maximize
+OBJ -> 14.0
+Entrepot_Grenoble -> 0.0
+Entrepot_Lyon -> 0.0
+Usine_Grenoble -> 1.0
+Usine_Lyon -> 1.0
+```
+
 ### Optimise ratio `gains / couts`
 
 *This operation in none linear, and thus cannot be solve with PuLP.*
+
+# Gateaux
+
+## Variables
+
+## Constraits
+
+## Optimise

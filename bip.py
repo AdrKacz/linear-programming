@@ -1,4 +1,5 @@
 from pulp import *
+from helpers import print_problem
 solver = get_solver('PULP_CBC_CMD', msg=0) # To avoid unnecessary logs
 
 # Define Variables
@@ -39,12 +40,7 @@ def maximise_ratio():
 
     print_problem(problem)
 
-def print_problem(problem):
-    print(problem)
-    print(f'Problem Status -> {LpStatus[problem.status]} : {LpSenses[problem.sense]}')
-    print(f'{problem.objective.name:>3} -> {value(problem.objective)}')
-    for v in problem.variables():
-        print(f'{str(v):>3} -> {value(v)}')
+
 
 if __name__ == '__main__':
-    maximise_ratio()
+    maximise_benefits()
