@@ -133,23 +133,77 @@ Tarte_Banane -> 2.0
 Tarte_Chocolat -> 2.0
 ```
 
+# Regression (3) `./regression.py`
+
+## Variables
+
+- `a`, the regression slope.
+
+- `b`, the regression intersection.
+
+- `errors`, the `array` of `floats` that contains the error for each input point.
+
+## Constraints
+
+We define `2`constraints for each point.
+
+These `2` constraints translate `|ax + b - y| <= error`.
+
+- `error >= a * points[i][0] + b - points[i][1]`, when `|ax + b - y|` is positive.
+
+- `error >= -(a * points[i][0] + b - points[i][1])`, when `|ax + b - y|` is negative.
+
+## Optimise
+
+We want to minimise the sum of `errors`.
+
+## Solution
+
+```
+Problem Status -> Optimal : Minimize
+OBJ -> 0.7981818140000001
+Err_0 -> 0.072727273
+Err_1 -> 0.084848485
+Err_10 -> 0.096969697
+Err_11 -> 0.063636364
+Err_12 -> 0.021212121
+Err_2 -> 0.14242424
+Err_3 -> 0.0
+Err_4 -> 0.057575758
+Err_5 -> 0.095151515
+Err_6 -> 0.027272727
+Err_7 -> 0.024242424
+Err_8 -> 0.11212121
+Err_9 -> 0.0
+  a -> 0.51515152
+  b -> 3.0121212
+```
+
+We compare this resultat with the analytic result (calculated in `formula_minimise_square`)
+
+```
+{a: 0.5246102167575096, b: 2.963878818608192}
+```
+
+Results are different but close (difference in `O(1e-1)`).
+
 # Voyage (2) `./voyage.py`
 
 ## Variables
 
 We define binary variable for each travel we can perform. There is **4** cities, so **6** different travels.
 
-- `lyon_st_etienne`, **1** if you go from *Lyon* to *St-Etienne* (or the other way around), **0** otherwise
+- `lyon_st_etienne`, **1** if you go from *Lyon* to *St-Etienne* (or the other way around), **0** otherwise.
 
-- `lyon_valence`, **1** if you go from *Lyon* to *Valence* (or the other way around), **0** otherwise
+- `lyon_valence`, **1** if you go from *Lyon* to *Valence* (or the other way around), **0** otherwise.
 
-- `lyon_grenoble`, **1** if you go from *Lyon* to *Grenoble* (or the other way around), **0** otherwise
+- `lyon_grenoble`, **1** if you go from *Lyon* to *Grenoble* (or the other way around), **0** otherwise.
 
-- `st_etienne_valence`, **1** if you go from *St-Etienne* to *Valence* (or the other way around), **0** otherwise
+- `st_etienne_valence`, **1** if you go from *St-Etienne* to *Valence* (or the other way around), **0** otherwise.
 
-- `st_etienne_grenoble`, **1** if you go from *St-Etienne* to *Grenoble* (or the other way around), **0** otherwise
+- `st_etienne_grenoble`, **1** if you go from *St-Etienne* to *Grenoble* (or the other way around), **0** otherwise.
 
-- `grenoble_valence`, **1** if you go from *Grenoble* to *Valence* (or the other way around), **0** otherwise
+- `grenoble_valence`, **1** if you go from *Grenoble* to *Valence* (or the other way around), **0** otherwise.
 
 ## Constraints
 
@@ -183,5 +237,48 @@ St_etienne_Valence -> 0.0
 ```
 
 The optimal way is ***Lyon* - *St-Etienne* - *Grenoble* - *Valence* - *Lyon***.
+
+
+
+
+
+# Coloration (2) `./coloration.mzn`
+
+## Variables
+
+We define `a`, `b`, `c`, `d`, `e`, `f`, the six edges of the graph.
+
+- `a` is linked to everyone but `f`.
+- `b` is linked to everyone but `e`.
+- `c` is linked to everyone but `d`.
+- `d` is linked to everyone but `c`.
+- `e` is linked to everyone but `b`.
+- `f` is linked to everyone but `a`.
+
+We define `n` the number of colour. Each value `a`, `b`, `c`, `d`, `e`, `f` is within `1` and `n` and corresponds to its colour.
+
+## Constraints
+
+We first declare `2 * 6` constraints to ensure that each edge's colours is within `[1 .. n]`.
+
+Then we define `4 * 6` constraints to ensure that each edge's colours is not the same as its neighbour's colour.
+
+## Optimise
+
+We minimise `n` the number of colour.
+
+## Solution
+
+```
+n = 3;
+a = 1;
+b = 2;
+c = 3;
+d = 3;
+e = 2;
+f = 1;
+```
+
+**The minimum number of colour is `3`.**
 
 # Jobshop (5) `./jobshop.py`

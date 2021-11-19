@@ -32,7 +32,8 @@ def formula_minimise_square():
 
     den = n * sum([point[0] * point[0] for point in points]) -  sum([point[0] for point in points]) * sum([point[0] for point in points])
 
-    return a_num / den, b_num / den
+    return {a: a_num / den, b: b_num / den}
 
 if __name__ == '__main__':
+    print(minimise_errors())
     print(formula_minimise_square())
