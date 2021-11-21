@@ -309,17 +309,20 @@ We minimise `past` the sum of delays.
 
 ## Solution
 
-```
-TOTAL PAST = 16
-Task	Release	Duration	Due	Start	Past
-A	    2	    5	        10	6	    1
-B	    5	    6	        21	14	    0
-C	    4	    8	        15	22	    15
-D	    0	    4	        10	2	    0
-E	    0	    2	        5	0       0
-F	    8	    3	        15	11	    0
-G	    9	    2	        22	20	    0
-```
+**We've reorganised the solution as a table to improve readability.**
+
+
+**TOTAL PAST = 16**
+Task | Release | Duration | Due | Start | Past
+-- | -- | -- | -- | -- | --
+A | 2 | 5 | 10 | 6 | 1
+B | 5 | 6 | 21 | 14 | 0
+C | 4 | 8 | 15 | 22 | 15
+D | 0 | 4 |10 | 2 | 0
+E | 0 | 2 | 5 | 0 | 0
+F | 8 | 3 | 15 | 11 | 0
+G | 9 | 2 | 22 | 20 | 0
+
 
 # Jesuites (5) `./jesuites.mzn`
 
@@ -366,7 +369,7 @@ We satisfy the constraints.
 
 ## Solution
 
-**For improved lisibility, we've replace `true` with `X` and `false` with `-`.**
+**We've replace `true` with `X` and `false` with `-` to improve readability.**
 
 ```
 Semaine: 1
