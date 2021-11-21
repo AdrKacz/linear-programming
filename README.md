@@ -309,6 +309,18 @@ We minimise `past` the sum of delays.
 
 ## Solution
 
+```
+TOTAL PAST = 16
+Task	Release	Duration	Due	Start	Past
+A	    2	    5	        10	6	    1
+B	    5	    6	        21	14	    0
+C	    4	    8	        15	22	    15
+D	    0	    4	        10	2	    0
+E	    0	    2	        5	0       0
+F	    8	    3	        15	11	    0
+G	    9	    2	        22	20	    0
+```
+
 # Jesuites (5) `./jesuites.mzn`
 
 ## Variables
@@ -353,3 +365,56 @@ Because there are `7` weeks, there are `4` tasks that needs `7` `volonteers` to 
 We satisfy the constraints.
 
 ## Solution
+
+**For improved lisibility, we've replace `true` with `X` and `false` with `-`.**
+
+```
+Semaine: 1
+   Volonteer: 1	2	3	4	5	6	7
+   Kitchen:   -	X	-	-	-	X	-
+   Bathroom:  -	-	X	-	X	-	-
+   Common:    X	-	-	X	-	-	-
+   Trash:     -	-	-	-	-	-	X
+
+Semaine: 2
+   Volonteer: 1	2	3	4	5	6	7
+   Kitchen:   X	-	-	-	X	-	-
+   Bathroom:  -	X	-	X	-	-	-
+   Common:    -	-	X	-	-	-	X
+   Trash:     -	-	-	-	-	X	-
+
+Semaine: 3
+   Volonteer: 1	2	3	4	5	6	7
+   Kitchen:   X	-	-	-	-	X	-
+   Bathroom:  -	-	X	X	-	-	-
+   Common:    -	X	-	-	-	-	X
+   Trash:     -	-	-	-	X	-	-
+
+Semaine: 4
+   Volonteer: 1	2	3	4	5	6	7
+   Kitchen:   -	-	X	-	-	X	-
+   Bathroom:  -	X	-	-	X	-	-
+   Common:    X	-	-	-	-	-	X
+   Trash:     -	-	-	X	-	-	-
+
+Semaine: 5
+   Volonteer: 1	2	3	4	5	6	7
+   Kitchen:   -	-	-	X	-	X	-
+   Bathroom:  -	-	-	-	X	-	X
+   Common:    X	X	-	-	-	-	-
+   Trash:     -	-	X	-	-	-	-
+
+Semaine: 6
+   Volonteer: 1	2	3	4	5	6	7
+   Kitchen:   -	-	-	-	X	X	-
+   Bathroom:  -	-	-	X	-	-	X
+   Common:    X	-	X	-	-	-	-
+   Trash:     -	X	-	-	-	-	-
+
+Semaine: 7
+   Volonteer: 1	2	3	4	5	6	7
+   Kitchen:   -	-	-	-	-	X	X
+   Bathroom:  -	-	-	X	X	-	-
+   Common:    -	X	X	-	-	-	-
+   Trash:     X	-	-	-	-	-	-
+```
