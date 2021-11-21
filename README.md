@@ -282,3 +282,74 @@ f = 1;
 **The minimum number of colour is `3`.**
 
 # Jobshop (5) `./jobshop.py`
+
+## Variables
+
+we define `4` arrays  or size `size`to hold the data of the problem.
+
+- `tasks`, `array of string` with the name of the tasks.
+
+- `releases`, `array of int` with the times after which each task can start to be done .
+
+- `durations`, `array of int` with the times needed for each task to be done.
+
+- `dues`, `array of int` with the times when each task need to be finished.
+
+We define a `array of int` `starts` of size `size` to hold the starts time, and a `int` variable `past` that hold the sum of each delays.
+
+## Constraints
+
+For all tasks, the `start` time must be greater than (*which means later than*) the `release` time.
+
+No task should overlap, that means that for each pair of task, there is at least one than ends before the other starts.
+
+## Optimise
+
+We minimise `past` the sum of delays.
+
+## Solution
+
+# Jesuites (5) `./jesuites.mzn`
+
+## Variables
+
+We define `3` `set of int` to store the dimensions of the problem and a 3-dimentional `cube` variable that store boolean variables.
+
+For a given `week`, `task`, and `volonteer`, `cube[week, task, volonteer]` is `true` if and only if this given `volonteer` performs the task `task` on week `week`.
+
+## Constraints
+
+We want each task to be performed each week. Each task need `2` `volonteers` but the trash which has index `4`.
+
+```
+constraint forall(w in weeks)(
+forall(t in tasks)(
+if t == 4 then sum(cube[w, t, volonteers]) = 1 else sum(cube[w, t, volonteers]) = 2 endif
+));
+```
+
+All team must be different, so each `volonteer` always works with a different `volonteer`.
+
+```
+constraint forall(w1, w2 in weeks where w1 != w2)(
+forall(t1, t2 in tasks)(
+cube[w1, t1, volonteers] != cube[w2, t2, volonteers]
+));
+```
+
+Each `volonteer` must exucute, one, and only one, task per week.
+
+```
+constraint forall(w in weeks)(
+forall(v in volonteers)(
+sum(cube[w, tasks, v]) = 1
+));
+```
+
+Because there are `7` weeks, there are `4` tasks that needs `7` `volonteers` to be performed, and there is not two times the same pair of `volonteer`, each `volonteer` will perform each task twice (so no need to impose this constraint). 
+
+## Optimise
+
+We satisfy the constraints.
+
+## Solution
