@@ -328,7 +328,7 @@ G | 9 | 2 | 22 | 20 | 0
 
 ## Variables
 
-We define `3` `set of int` to store the dimensions of the problem and a 3-dimentional `cube` variable that store boolean variables.
+We define `3` `set of int` to store the dimensions of the problem and a 3-dimentional `cube` variable that stores boolean variables.
 
 For a given `week`, `task`, and `volonteer`, `cube[week, task, volonteer]` is `true` if and only if this given `volonteer` performs the task `task` on week `week`.
 
@@ -421,3 +421,166 @@ Semaine: 7
    Common:    -	X	X	-	-	-	-
    Trash:     X	-	-	-	-	-	-
 ```
+
+# Ateliers Vehicules (5) `./ateliers-vehicules.mzn`
+
+## Variables
+
+We define `4` `set of int` to store the dimensions of the problem and a 4-dimentional `matrix` variable that stores boolean variables.
+
+For a given `atelier`, `operateur`, `voiture`, and `temps`, `matrix[ateliers, operateurs, voitures, temps]` is `true` if and only if this givent `operateur` works on this given `voiture` at this given `temps` in this given `atelier`.
+
+## Constraints
+
+Each `voiture` has to go through each `atelier` exactly once.
+
+```
+constraint forall(v in voitures)(
+sum(matrix[ateliers, operateurs, v, temps]) = 4
+);
+
+```
+
+Each `operateur` cannot work more than the capacity of the `atelier` he or she is working in at this a given `temps`.
+
+```
+constraint forall(o in operateurs)(
+forall(a in ateliers)(
+forall(t in temps)(
+sum(matrix[a, o, voitures, t]) <= ateliers_load[a]
+)));
+```
+
+Each `operateur` cannot work on more than one `atelier` at a time.
+
+```
+constraint forall(o in operateurs)(
+forall(t in temps)(
+forall(v in voitures)(
+sum(matrix[ateliers, o, v, t]) <= 1
+)));
+```
+
+Each `operateur` cannot work on any `atelier` if he or she is not here.
+```
+constraint forall(o in operateurs)(
+forall(t in temps where t < operateur_start[o])(
+sum(matrix[ateliers, o, voitures, t]) = 0
+));
+
+constraint forall(o in operateurs)(
+forall(t in temps where t > operateur_end[o])(
+sum(matrix[ateliers, o, voitures, t]) = 0
+));
+```
+
+## Optimise
+
+We satisfy the constraints
+
+## Solution
+
+*MiniZinc ran for more than 5 minutes 41 seconds and returns `=====UNKNOWN=====`.* 
+
+# Restaurant (5) `./restaurant.mzn`
+
+## Variables
+
+We define a `program`, with `14` rows corresponding to each day, and `40 > 38` columns corresponding to each employees.
+
+There are at most `38` employees, indeed, the maximum number of employees needed is `19` on Thursday, and `19 * 2 = 38`.
+
+We count the optimal number of employee with the variable `number_of_employee`.
+
+We use `14` rows instead of `7` to avoid using the modulo operator. So, for example, Monday is `1` and `8`. So we can more easily perform the shift of `5` days per worker.
+
+## Constraints
+
+The number of employee optimal should be between 1 and 40.
+
+```
+constraint number_of_employee >= 1 /\ number_of_employee <= 40;
+```
+
+Each day should have the correct number of employees, define in `DATA:requires`.
+
+
+```
+constraint forall(w in week)(
+sum(program[w, maximum_set_of_employee]) + sum(program[w + 7, maximum_set_of_employee]) >= requires[w]
+);
+```
+
+The employee that have an index greater than the optimal number of employee should not work.
+
+```
+constraint forall(e in maximum_set_of_employee where e > number_of_employee)(
+sum(program[1..14, e]) = 0
+);
+```
+
+Each employee should not work more than 5 days a week
+
+```
+constraint forall(e in maximum_set_of_employee where e <= number_of_employee)(
+sum(program[1..14, e]) = 5
+);
+```
+
+If an employee start working on a day, he or she works the 4 following days.
+
+```
+constraint forall(e in maximum_set_of_employee where e <= number_of_employee)(
+if program[1, e] == 1 then sum(program[1..5, e]) = 5
+elseif program[2, e] == 1 then sum(program[2..6, e]) = 5
+elseif program[3, e] == 1 then sum(program[3..7, e]) = 5
+elseif program[4, e] == 1 then sum(program[4..8, e]) = 5
+elseif program[5, e] == 1 then sum(program[5..9, e]) = 5
+elseif program[6, e] == 1 then sum(program[6..10, e]) = 5
+else sum(program[7..11, e]) = 5
+endif
+);
+```
+
+## Optimise
+
+We minimise the `number_of_employee` : `solve minimize number_of_employee;`.
+
+## Solution
+
+In a first run with found `34` employees, however we made an error on the constraint concerning the employees that shouldn't work :
+
+```
+constraint forall(e in maximum_set_of_employee where e > number_of_employee)(
+sum(program[1..7, e]) = 0
+);
+```
+
+Instead of:
+
+```
+constraint forall(e in maximum_set_of_employee where e > number_of_employee)(
+sum(program[1..14, e]) = 0
+);
+```
+
+When we corrected the bug, *Minizinc* didn't found a solution.
+
+The solution found with the bug was:
+
+Day | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
+Monday | X | - | - | - | - | - | - | - | - | - | - | - | - | - | - | X | X | X | X | X | X | X | X | X | X | X | X | X | - | - | - | - | - | -
+Tuesday | X | X | X | X | X | X | X | X | X | X | X | X | X | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | -
+Wednesday | X | - | - | - | - | - | - | - | - | - | - | - | X | X | X | - | - | - | - | X | X | X | X | X | X | X | X | X | X | X | - | - | -
+Thursday | X | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X
+Friday | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X | - | - | - | - | - | - | - | - | - | - | - | - | - | - | -
+Saturday | - | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X | X | - | - | - | - | - | - | - | - | - | - | - | - | - | - | -
+Sunday | - | X | X | X | X | X | X | X | X | X | X | X | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | -
+
+
+*As you can see, the solution doesn't satisfy the constraint ... We don't understand why.*
+
+
+
+
